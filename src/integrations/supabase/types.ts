@@ -14,7 +14,175 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          batch_id: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          severity: Database["public"]["Enums"]["alert_severity"]
+          title: string
+          user_id: string
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          title: string
+          user_id: string
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      batches: {
+        Row: {
+          batch_id: string
+          created_at: string
+          id: string
+          input_weight: number
+          loss_percentage: number | null
+          moisture_loss: number | null
+          output_weight: number | null
+          processing_loss: number | null
+          product: string
+          spoilage_loss: number | null
+          status: Database["public"]["Enums"]["batch_status"]
+          trimming_loss: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          batch_id: string
+          created_at?: string
+          id?: string
+          input_weight: number
+          loss_percentage?: number | null
+          moisture_loss?: number | null
+          output_weight?: number | null
+          processing_loss?: number | null
+          product: string
+          spoilage_loss?: number | null
+          status?: Database["public"]["Enums"]["batch_status"]
+          trimming_loss?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          batch_id?: string
+          created_at?: string
+          id?: string
+          input_weight?: number
+          loss_percentage?: number | null
+          moisture_loss?: number | null
+          output_weight?: number | null
+          processing_loss?: number | null
+          product?: string
+          spoilage_loss?: number | null
+          status?: Database["public"]["Enums"]["batch_status"]
+          trimming_loss?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          organization: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          organization?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          organization?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quality_uploads: {
+        Row: {
+          ai_analysis: string | null
+          batch_id: string | null
+          created_at: string
+          defect_score: number | null
+          freshness_score: number | null
+          id: string
+          image_url: string
+          notes: string | null
+          quality_score: number | null
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: string | null
+          batch_id?: string | null
+          created_at?: string
+          defect_score?: number | null
+          freshness_score?: number | null
+          id?: string
+          image_url: string
+          notes?: string | null
+          quality_score?: number | null
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: string | null
+          batch_id?: string | null
+          created_at?: string
+          defect_score?: number | null
+          freshness_score?: number | null
+          id?: string
+          image_url?: string
+          notes?: string | null
+          quality_score?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quality_uploads_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +191,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      alert_severity: "low" | "medium" | "high" | "critical"
+      batch_status:
+        | "inbound"
+        | "processing"
+        | "packaging"
+        | "dispatch"
+        | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +324,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      alert_severity: ["low", "medium", "high", "critical"],
+      batch_status: [
+        "inbound",
+        "processing",
+        "packaging",
+        "dispatch",
+        "completed",
+      ],
+    },
   },
 } as const
