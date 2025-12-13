@@ -32,7 +32,7 @@ const Index = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
   }, [user, loading, navigate]);
 
@@ -252,11 +252,10 @@ const Index = () => {
                       key={alert.id}
                       className="flex items-center gap-3 p-3 rounded-lg bg-muted/50"
                     >
-                      <AlertTriangle className={`h-5 w-5 ${
-                        alert.severity === 'critical' ? 'text-destructive' :
-                        alert.severity === 'high' ? 'text-orange-400' :
-                        'text-amber-400'
-                      }`} />
+                      <AlertTriangle className={`h-5 w-5 ${alert.severity === 'critical' ? 'text-destructive' :
+                          alert.severity === 'high' ? 'text-orange-400' :
+                            'text-amber-400'
+                        }`} />
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{alert.title}</p>
                         <p className="text-sm text-muted-foreground truncate">{alert.message}</p>

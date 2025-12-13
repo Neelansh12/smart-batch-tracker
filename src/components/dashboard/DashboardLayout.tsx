@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   Upload,
   LogOut,
+  Home,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +26,8 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { id: 'overview', label: 'Overview', icon: LayoutDashboard, path: '/' },
+  { id: 'home', label: 'Home', icon: Home, path: '/' },
+  { id: 'overview', label: 'Overview', icon: LayoutDashboard, path: '/dashboard' },
   { id: 'batches', label: 'Batch Tracking', icon: Package, path: '/batches' },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
   { id: 'alerts', label: 'Alerts', icon: Bell, path: '/alerts' },
@@ -73,7 +75,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    navigate('/');
   };
 
   return (
@@ -116,7 +118,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
               const showBadge = item.id === 'alerts' && unreadAlerts > 0;
-              
+
               return (
                 <button
                   key={item.id}
@@ -181,3 +183,4 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     </div>
   );
 }
+

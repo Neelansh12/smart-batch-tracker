@@ -25,7 +25,7 @@ export default function Settings() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
   }, [user, loading, navigate]);
 
@@ -39,7 +39,7 @@ export default function Settings() {
       .select('*')
       .eq('user_id', user?.id)
       .maybeSingle();
-    
+
     if (data) {
       setProfile({
         full_name: data.full_name || '',
@@ -71,7 +71,7 @@ export default function Settings() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    navigate('/');
   };
 
   if (loading) return null;

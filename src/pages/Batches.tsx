@@ -61,7 +61,7 @@ export default function Batches() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
   }, [user, loading, navigate]);
 
@@ -74,7 +74,7 @@ export default function Batches() {
       .from('batches')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) {
       toast({ title: 'Error', description: 'Failed to fetch batches', variant: 'destructive' });
     } else {
@@ -84,7 +84,7 @@ export default function Batches() {
 
   const createBatch = async () => {
     if (!user) return;
-    
+
     const { error } = await supabase.from('batches').insert({
       user_id: user.id,
       batch_id: newBatch.batch_id,
@@ -108,7 +108,7 @@ export default function Batches() {
     if (!next) return;
 
     const updates: Partial<Batch> = { status: next };
-    
+
     // Calculate losses when completing
     if (next === 'completed' && batch.output_weight) {
       const totalLoss = ((batch.input_weight - batch.output_weight) / batch.input_weight) * 100;

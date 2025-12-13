@@ -19,7 +19,7 @@ export default function Auth() {
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 
@@ -28,7 +28,7 @@ export default function Auth() {
     setIsLoading(true);
     const { error } = await signIn(email, password);
     setIsLoading(false);
-    
+
     if (error) {
       toast({
         title: 'Sign in failed',
@@ -37,7 +37,7 @@ export default function Auth() {
       });
     } else {
       toast({ title: 'Welcome back!', description: 'You have successfully signed in.' });
-      navigate('/');
+      navigate('/dashboard');
     }
   };
 
@@ -46,7 +46,7 @@ export default function Auth() {
     setIsLoading(true);
     const { error } = await signUp(email, password, fullName);
     setIsLoading(false);
-    
+
     if (error) {
       toast({
         title: 'Sign up failed',
@@ -62,7 +62,7 @@ export default function Auth() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
-      
+
       <Card className="w-full max-w-md relative z-10 border-border/50 shadow-2xl">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary shadow-glow">
@@ -73,14 +73,14 @@ export default function Auth() {
             <CardDescription>Waste Minimization Dashboard</CardDescription>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
@@ -118,7 +118,7 @@ export default function Auth() {
                 </Button>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">

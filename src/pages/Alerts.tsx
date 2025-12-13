@@ -37,7 +37,7 @@ export default function Alerts() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
   }, [user, loading, navigate]);
 
@@ -65,7 +65,7 @@ export default function Alerts() {
       .from('alerts')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) {
       toast({ title: 'Error', description: 'Failed to fetch alerts', variant: 'destructive' });
     } else {
@@ -162,7 +162,7 @@ export default function Alerts() {
               filteredAlerts.map((alert) => {
                 const config = severityConfig[alert.severity];
                 const Icon = config.icon;
-                
+
                 return (
                   <div
                     key={alert.id}

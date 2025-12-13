@@ -38,7 +38,7 @@ export default function QualityUpload() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
   }, [user, loading, navigate]);
 
@@ -51,7 +51,7 @@ export default function QualityUpload() {
       .from('quality_uploads')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (!error) setUploads(data || []);
   };
 
@@ -75,7 +75,7 @@ export default function QualityUpload() {
       // Upload to storage
       const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-      
+
       const { error: uploadError } = await supabase.storage
         .from('quality-images')
         .upload(fileName, selectedFile);
@@ -130,11 +130,11 @@ export default function QualityUpload() {
   const deleteUpload = async (id: string, imageUrl: string) => {
     // Extract file path from URL
     const path = imageUrl.split('/quality-images/')[1];
-    
+
     if (path) {
       await supabase.storage.from('quality-images').remove([path]);
     }
-    
+
     const { error } = await supabase.from('quality_uploads').delete().eq('id', id);
     if (!error) {
       toast({ title: 'Deleted', description: 'Upload removed' });
@@ -247,7 +247,7 @@ export default function QualityUpload() {
                   alt="Analyzed"
                   className="w-full h-48 object-cover rounded-lg"
                 />
-                
+
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center p-3 bg-muted/50 rounded-lg">
                     <p className="text-xs text-muted-foreground">Quality</p>
