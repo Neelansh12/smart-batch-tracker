@@ -1,4 +1,0 @@
-project_id = "wfqfcfndtbqfjxzazptb"
-
-[functions.analyze-quality]
-verify_jwt = false
