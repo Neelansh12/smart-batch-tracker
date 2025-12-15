@@ -130,19 +130,30 @@ export function DashboardLayout({ children }) {
                     {/* Footer */}
                     <div className={cn('border-t border-sidebar-border p-4', collapsed && 'p-2')}>
                         <div className={cn('flex items-center gap-3', collapsed && 'justify-center')}>
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent">
-                                <span className="text-xs font-semibold text-sidebar-accent-foreground">
-                                    {user?.email?.charAt(0).toUpperCase() || 'U'}
-                                </span>
-                            </div>
+                            {user?.avatar_url ? (
+                                <img
+                                    src={user.avatar_url}
+                                    alt={user.full_name || 'User'}
+                                    className="h-8 w-8 rounded-full object-cover border border-sidebar-border"
+                                />
+                            ) : (
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent">
+                                    <span className="text-xs font-semibold text-sidebar-accent-foreground">
+                                        {user?.full_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                                    </span>
+                                </div>
+                            )}
                             {!collapsed && (
-                                <div className="flex-1 animate-fade-in">
-                                    <p className="text-xs font-medium text-sidebar-foreground truncate">
+                                <div className="flex-1 animate-fade-in overflow-hidden">
+                                    <p className="text-sm font-semibold text-sidebar-foreground truncate">
+                                        {user?.full_name || 'User'}
+                                    </p>
+                                    <p className="text-xs text-sidebar-foreground/60 truncate" title={user?.email}>
                                         {user?.email}
                                     </p>
                                     <button
                                         onClick={handleSignOut}
-                                        className="text-xs text-sidebar-foreground/60 hover:text-sidebar-foreground flex items-center gap-1"
+                                        className="mt-1 text-xs text-sidebar-foreground/60 hover:text-destructive flex items-center gap-1 transition-colors"
                                     >
                                         <LogOut className="h-3 w-3" />
                                         Sign out

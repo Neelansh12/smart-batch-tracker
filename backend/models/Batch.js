@@ -16,6 +16,28 @@ const batchSchema = new mongoose.Schema({
     trimming_loss: { type: Number, default: 0 },
     processing_loss: { type: Number, default: 0 },
     spoilage_loss: { type: Number, default: 0 },
+
+    // New Fields
+    supplier_info: {
+        name: String,
+        origin: String,
+        batch_code: String // Supplier's batch code
+    },
+    dates: {
+        manufacturing: Date,
+        expiry: Date,
+        received: { type: Date, default: Date.now }
+    },
+    timeline: [{
+        status: {
+            type: String,
+            enum: ['inbound', 'processing', 'packaging', 'dispatch', 'completed']
+        },
+        timestamp: { type: Date, default: Date.now },
+        notes: String,
+        user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    }],
+
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
 });

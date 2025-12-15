@@ -1,73 +1,74 @@
-# Welcome to your Lovable project
+# Smart Batch Tracker
 
-## Project info
+A full-stack **MERN** (MongoDB, Express, React, Node.js) application for tracking measurement batches.
 
-**URL**: https://lovable.dev/projects/e2d8ed17-2ee9-42a5-b63c-641bf793f55b
+## Project Structure
 
-## How can I edit this code?
+This project has been restructured into a monorepo-style layout:
 
-There are several ways of editing your application.
+-   [`frontend/`](./frontend) - React application (Vite + local API)
+-   [`backend/`](./backend) - Node.js + Express API
 
-**Use Lovable**
+## Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e2d8ed17-2ee9-42a5-b63c-641bf793f55b) and start prompting.
+-   **Node.js** (v18 or higher)
+-   **MongoDB Atlas Connection String** (Setup in `backend/.env`)
 
-Changes made via Lovable will be committed automatically to this repo.
+## Installation & Setup
 
-**Use your preferred IDE**
+### 1. Backend Setup
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Navigate to the backend directory and install dependencies:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+cd backend
+npm install
+```
 
-Follow these steps:
+Start the backend server:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+npm start
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Runs on **Port 5000**.
+Connects to **MongoDB Atlas**.
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 2. Frontend Setup
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Open a new terminal, navigate to the frontend directory, and install dependencies:
+
+```bash
+cd frontend
+npm install
+```
+
+Start the frontend development server:
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Runs on **http://localhost:3000**.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Configuration
 
-**Use GitHub Codespaces**
+### Backend Environment (`backend/.env`)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```env
+MONGODB_URI=your_atlas_connection_string
+JWT_SECRET=your_jwt_secret
+PORT=5000
+```
 
-## What technologies are used for this project?
+### Frontend Configuration
 
-This project is built with:
+The frontend is pre-configured to communicate with the backend at `http://localhost:5000/api`.
+Authentication is handled via JWT tokens stored in local storage.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Features
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e2d8ed17-2ee9-42a5-b63c-641bf793f55b) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+-   **MERN Stack**: Pure JavaScript full-stack architecture.
+-   **Authentication**: Custom Node.js auth (Login/Signup).
+-   **Cloud Database**: Data stored securely in MongoDB Atlas.
+-   **Modern UI**: Built with React, Tailwind CSS, and Shadcn UI.

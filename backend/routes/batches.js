@@ -17,7 +17,13 @@ router.post('/', auth, async (req, res) => {
     try {
         const newBatch = new Batch({
             ...req.body,
-            user_id: req.user._id
+            user_id: req.user._id,
+            timeline: [{
+                status: req.body.status || 'inbound',
+                notes: 'Batch created',
+                user_id: req.user._id,
+                timestamp: new Date()
+            }]
         });
         const savedBatch = await newBatch.save();
         res.json(savedBatch);
@@ -29,12 +35,24 @@ router.post('/', auth, async (req, res) => {
 // Update batch
 router.put('/:id', auth, async (req, res) => {
     try {
-        const updatedBatch = await Batch.findOneAndUpdate(
-            { _id: req.params.id, user_id: req.user._id },
-            req.body,
-            { new: true }
-        );
-        if (!updatedBatch) return res.status(404).json({ error: 'Batch not found' });
+        const batch = await Batch.findOne({ _id: req.params.id, user_id: req.user._id });
+        if (!batch) return res.status(404).json({ error: 'Batch not found' });
+
+        // Check for status change
+        if (req.body.status && req.body.status !== batch.status) {
+            batch.timeline.push({
+                status: req.body.status,
+                notes: req.body.notes || `Status updated to ${req.body.status}`,
+                user_id: req.user._id,
+                timestamp: new Date()
+            });
+        }
+
+        // Update fields
+        Object.assign(batch, req.body);
+        batch.updated_at = Date.now();
+
+        const updatedBatch = await batch.save();
         res.json(updatedBatch);
     } catch (err) {
         res.status(500).json({ error: err.message });

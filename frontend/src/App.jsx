@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import AuthCallback from "./pages/AuthCallback";
 import Batches from "./pages/Batches";
 import Analytics from "./pages/Analytics";
 import Alerts from "./pages/Alerts";
@@ -27,6 +28,7 @@ const App = () => (
                         <Route path="/" element={<Home />} />
                         <Route path="/dashboard" element={<Index />} />
                         <Route path="/auth" element={<Auth />} />
+                        <Route path="/auth/callback" element={<AuthCallback />} />
                         <Route path="/batches" element={<Batches />} />
                         <Route path="/analytics" element={<Analytics />} />
                         <Route path="/alerts" element={<Alerts />} />

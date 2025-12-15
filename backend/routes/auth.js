@@ -3,6 +3,21 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
+const passport = require('passport');
+
+// Google Auth Routes
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login', session: false }),
+    (req, res) => {
+        // Successful authentication
+        const token = jwt.sign({ _id: req.user._id }, process.env.JWT_SECRET);
+
+        // Redirect to frontend with token
+        res.redirect(`http://localhost:3000/auth/callback?token=${token}&userId=${req.user._id}&email=${req.user.email}&name=${encodeURIComponent(req.user.full_name)}`);
+    }
+);
 
 // Register
 router.post('/register', async (req, res) => {
