@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
+  googleId: { type: String, unique: true },
   password: { type: String, required: true },
-  full_name: String,
+
+  full_name: { type: String, required: true },
   organization: String,
   avatar_url: String,
   created_at: { type: Date, default: Date.now },

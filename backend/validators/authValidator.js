@@ -4,6 +4,7 @@ const registerSchema = z.object({
   body: z.object({
     email: z.string().email(),
     password: z.string().min(6),
+    googleId: z.string().optional(),
     full_name: z.string().min(2),
     organization: z.string().optional(),
   }),
