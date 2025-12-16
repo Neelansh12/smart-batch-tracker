@@ -5,7 +5,7 @@ const userRepository = require('../repositories/userRepository');
 
 class AuthService {
     async register(data) {
-        const { email, password, full_name, organization } = data;
+        const { email, googleId, password, full_name, organization } = data;
 
         const existingUser = await userRepository.findByEmail(email);
         if (existingUser) {
@@ -17,6 +17,7 @@ class AuthService {
 
         const newUser = await userRepository.create({
             email,
+            googleId,
             password: hashedPassword,
             full_name,
             organization,
@@ -24,6 +25,7 @@ class AuthService {
 
         return {
             id: newUser._id,
+            googleId: newUser.googleId,
             email: newUser.email,
             full_name: newUser.full_name,
         };
@@ -75,6 +77,7 @@ class AuthService {
             id: user._id,
             email: user.email,
             full_name: user.full_name,
+            googleId: user.googleId,
             organization: user.organization,
             avatar_url: user.avatar_url
         };

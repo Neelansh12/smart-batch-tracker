@@ -3,11 +3,15 @@ const authService = require('../services/authService');
 class AuthController {
     async register(req, res) {
         try {
+            console.log("registering User ~Controller");
             const user = await authService.register(req.body);
             res.json({ user });
         } catch (err) {
             const status = err.message === 'Email already exists' ? 400 : 500;
-            res.status(status).json({ error: err.message });
+            res.status(status).json({
+                error: err.message,
+                message: "Registration failed ~ Controller"
+            });
         }
     }
 
