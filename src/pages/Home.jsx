@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Activity, ShieldCheck, BarChart3, Bell, ArrowRight, Leaf } from "lucide-react";
+import { Package, Activity, ShieldCheck, BarChart3, Bell, ArrowRight, Leaf, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -44,7 +44,7 @@ const Home = () => {
             <main className="flex-1 pt-24">
                 <section className="container mx-auto px-6 py-24 text-center space-y-8 animate-fade-in">
                     <div className="mx-auto max-w-3xl space-y-4">
-                        <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent pb-2">
+                        <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent pb-2">
                             Smart Food Processing & Waste Minimization
                         </h1>
                         <p className="text-xl text-muted-foreground leading-relaxed">
@@ -123,34 +123,81 @@ const Home = () => {
                     </div>
                 </section>
 
-                {/* CTA Section */}
-                <section className="bg-primary/5 py-24">
-                    <div className="container mx-auto px-6 text-center space-y-8">
-                        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary-foreground/90 text-foreground text-cyan-800">Ready to optimize your production?</h2>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                            Join forward-thinking food processors using FoodFlow to cut waste and boost profitability.
-                        </p>
-                        <Button size="lg" className="px-8 text-lg h-12 shadow-lg hover:shadow-xl transition-all" onClick={() => navigate(user ? "/dashboard" : "/auth")}>
-                            Get Started for Free
-                        </Button>
+                {/* Let's Talk & Footer Section */}
+                <section className="bg-slate-50 py-20 text-slate-800">
+                    <div className="container mx-auto px-6">
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-16">
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-5xl font-bold tracking-tight text-slate-900">
+                                        Let's <span className="text-[#6366f1]">Talk</span>
+                                    </h2>
+                                </div>
+                                <p className="text-2xl font-bold text-slate-900">
+                                    Discover how FoodFlow can help.
+                                </p>
+                            </div>
+                            <Button
+                                size="lg"
+                                className="bg-[#6039db] hover:bg-[#4d2c91] text-white rounded-full px-10 py-7 text-lg font-medium shadow-none transition-transform hover:scale-105"
+                                onClick={() => navigate(user ? "/dashboard" : "/auth")}
+                            >
+                                Get a Demo
+                            </Button>
+                        </div>
+
+                        <hr className="border-gray-300 mb-12" />
+
+                        <div className="flex flex-col lg:flex-row justify-between gap-12">
+                            {/* Links Columns */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 lg:gap-24 flex-1">
+                                <div className="flex flex-col gap-4">
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">Solutions</a>
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">Locations</a>
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">Insights</a>
+                                </div>
+                                <div className="flex flex-col gap-4">
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">About FoodFlow</a>
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">Careers</a>
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">News Center</a>
+                                </div>
+                                <div className="flex flex-col gap-4">
+                                    <a href="#" className="font-medium text-slate-900 hover:text-[#6039db] transition-colors">Governance & Integrity</a>
+                                </div>
+                            </div>
+
+                            {/* Social Icons & Copyright */}
+                            <div className="flex flex-col gap-8 lg:items-end">
+                                <div className="flex gap-4">
+                                    <a href="#" className="text-slate-600 hover:text-[#6039db] transition-colors"><Facebook className="h-6 w-6" /></a>
+                                    <a href="#" className="text-slate-600 hover:text-[#6039db] transition-colors"><Instagram className="h-6 w-6" /></a>
+                                    <a href="#" className="text-slate-600 hover:text-[#6039db] transition-colors"><Linkedin className="h-6 w-6" /></a>
+                                    <a href="#" className="text-slate-600 hover:text-[#6039db] transition-colors"><Twitter className="h-6 w-6" /></a>
+                                    <a href="#" className="text-slate-600 hover:text-[#6039db] transition-colors"><Youtube className="h-6 w-6" /></a>
+                                </div>
+                                <div className="text-sm text-slate-500 space-y-2 lg:text-right">
+                                    <p>Copyright © {new Date().getFullYear()} FoodFlow Inc. All Rights Reserved.</p>
+                                    <div className="flex flex-wrap gap-x-4 gap-y-2 lg:justify-end">
+                                        <a href="#" className="hover:underline">Privacy notice</a>
+                                        <span className="hidden sm:inline">|</span>
+                                        <a href="#" className="hover:underline">Terms of use</a>
+                                        <span className="hidden sm:inline">|</span>
+                                        <a href="#" className="hover:underline">Cookie Settings</a>
+                                    </div>
+                                    <div className="flex flex-wrap gap-x-4 gap-y-2 lg:justify-end">
+                                        <a href="#" className="hover:underline">Limit the use of my sensitive personal information</a>
+                                    </div>
+                                    <div className="flex flex-wrap gap-x-4 gap-y-2 lg:justify-end">
+                                        <a href="#" className="hover:underline">FoodFlow Privacy Statement</a>
+                                        <span className="hidden sm:inline">|</span>
+                                        <a href="#" className="hover:underline">Health Privacy Notice</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </main>
-
-            {/* Footer */}
-            <footer className="border-t border-border/40 bg-muted/30 py-12">
-                <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-primary/20">
-                            <Leaf className="h-4 w-4 text-primary" />
-                        </div>
-                        <span className="font-semibold text-foreground">FoodFlow</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                        © {new Date().getFullYear()} FoodFlow. All rights reserved.
-                    </p>
-                </div>
-            </footer>
         </div>
     );
 };
