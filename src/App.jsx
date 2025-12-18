@@ -12,6 +12,9 @@ import Analytics from "./pages/Analytics";
 import Alerts from "./pages/Alerts";
 import QualityUpload from "./pages/QualityUpload";
 import Settings from "./pages/Settings";
+import About from "./pages/About";
+import Insights from "./pages/Insights";
+import News from "./pages/News";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +35,9 @@ const App = () => (
                         <Route path="/alerts" element={<Alerts />} />
                         <Route path="/quality-upload" element={<QualityUpload />} />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/insights" element={<Insights />} />
+                        <Route path="/news" element={<News />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>
