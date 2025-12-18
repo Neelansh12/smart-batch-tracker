@@ -9,12 +9,54 @@ class QualityService {
     async createUpload(userId, file, data, protocol, host) {
         const imageUrl = `${protocol}://${host}/uploads/${file.filename}`;
 
-        // Mock AI analysis logic
-        const qualityScore = Math.floor(Math.random() * 20) + 80;
-        const freshnessScore = Math.floor(Math.random() * 20) + 80;
-        const defectScore = Math.floor(Math.random() * 10);
+        // Initialize stats
+        let qualityScore = 0;
+        let freshnessScore = 0;
+        let defectScore = 0;
+        let aiAnalysis = 'Analysis failed';
 
-        // Simulate AI analysis delay if we wanted, but synchronous for now
+        try {
+            if (process.env.GEMINI_API_KEY) {
+                const { GoogleGenerativeAI } = require("@google/generative-ai");
+                const fs = require("fs");
+                const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+                const prompt = "Analyze this food/raw material image. Return a raw JSON object (no markdown formatting, no backticks) with these fields: quality_score (0-100), freshness_score (0-100), defect_score (0-100), analysis_text (short summary).";
+
+                const imagePart = {
+                    inlineData: {
+                        data: fs.readFileSync(file.path).toString("base64"),
+                        mimeType: file.mimetype,
+                    },
+                };
+
+                const result = await model.generateContent([prompt, imagePart]);
+                const response = result.response;
+                const text = response.text();
+
+                // Clean the text to ensure it's valid JSON (remove backticks if present)
+                const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                const analysis = JSON.parse(jsonStr);
+
+                qualityScore = analysis.quality_score || 70;
+                freshnessScore = analysis.freshness_score || 70;
+                defectScore = analysis.defect_score || 10;
+                aiAnalysis = analysis.analysis_text || "AI completed analysis.";
+            } else {
+                // Mock AI analysis logic if no key
+                console.log("No GEMINI_API_KEY found, using mock data");
+                qualityScore = Math.floor(Math.random() * 20) + 80;
+                freshnessScore = Math.floor(Math.random() * 20) + 80;
+                defectScore = Math.floor(Math.random() * 10);
+                aiAnalysis = 'Simulated analysis (Add GEMINI_API_KEY to enable real AI)';
+            }
+        } catch (error) {
+            console.error("AI Analysis failed:", error);
+            aiAnalysis = "AI analysis failed, using fallback values.";
+            qualityScore = 50;
+        }
+
         const uploadData = {
             user_id: userId,
             batch_id: data.batch_id,
@@ -22,7 +64,7 @@ class QualityService {
             quality_score: qualityScore,
             freshness_score: freshnessScore,
             defect_score: defectScore,
-            ai_analysis: 'Automated analysis pending integration',
+            ai_analysis: aiAnalysis,
             notes: data.notes,
         };
 
