@@ -1,4 +1,5 @@
 const qualityRepository = require('../repositories/qualityRepository');
+const alertService = require('./alertService');
 
 class QualityService {
     async getAllUploads(userId) {
@@ -22,7 +23,7 @@ class QualityService {
                 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
                 // Add safety settings to prevent over-blocking
                 const model = genAI.getGenerativeModel({
-                    model: "gemini-1.5-pro",
+                    model: "gemini-1.5-flash",
                     safetySettings: [
                         { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
                         { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
@@ -71,18 +72,20 @@ class QualityService {
             }
         } catch (error) {
             console.error("AI Analysis failed:", error);
-            // Fallback to mock values instead of showing failure
-            qualityScore = Math.floor(Math.random() * 20) + 70;
-            freshnessScore = Math.floor(Math.random() * 20) + 70;
-            defectScore = Math.floor(Math.random() * 10);
-
             // Show the actual error message or a user-friendly version
             let errorMessage = error.message;
             if (errorMessage.includes("API key not valid")) errorMessage = "Invalid API Key";
             if (errorMessage.includes("fetch failed")) errorMessage = "Network Error";
+            if (errorMessage.includes("404")) errorMessage = "Enable 'Generative Language API' in Google Cloud Console.";
 
             aiAnalysis = `AI Analysis Failed: ${errorMessage}`;
+
+            // Set scores to null/0 to indicate failure, strictly no dummy data
+            qualityScore = 0;
+            freshnessScore = 0;
+            defectScore = 0;
         }
+
 
         const uploadData = {
             user_id: userId,
@@ -95,7 +98,44 @@ class QualityService {
             notes: data.notes,
         };
 
-        return await qualityRepository.create(uploadData);
+        // Create the upload record
+        const savedUpload = await qualityRepository.create(uploadData);
+
+        // --- ALERT GENERATION LOGIC ---
+        try {
+            // 1. Alert for System Failure (AI Failed)
+            if (aiAnalysis.includes("AI Analysis Failed")) {
+                await alertService.createAlert(userId, {
+                    title: "AI Analysis Failed",
+                    message: `Image upload for batch ${data.batch_id || 'N/A'} failed to analyze. Reason: ${aiAnalysis}`,
+                    severity: "medium",
+                    batch_id: data.batch_id // might be null/undefined if not provided
+                });
+            }
+            // 2. Alert for Low Quality (Score < 60)
+            else if (qualityScore < 60) {
+                await alertService.createAlert(userId, {
+                    title: "Low Quality Detected",
+                    message: `Batch ${data.batch_id || 'N/A'} recorded a Quality Score of ${qualityScore}%. Action may be required.`,
+                    severity: "high",
+                    batch_id: data.batch_id
+                });
+            }
+            // 3. Alert for High Defect Rate (Score > 20)
+            else if (defectScore > 20) {
+                await alertService.createAlert(userId, {
+                    title: "High Defect Rate",
+                    message: `Batch ${data.batch_id || 'N/A'} has a Defect Score of ${defectScore}%.`,
+                    severity: "medium",
+                    batch_id: data.batch_id
+                });
+            }
+        } catch (alertError) {
+            console.error("Failed to generate alert:", alertError);
+            // Don't block the main response if alerting fails
+        }
+
+        return savedUpload;
     }
 
     async deleteUpload(id, userId) {

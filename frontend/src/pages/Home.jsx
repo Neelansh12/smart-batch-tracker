@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Package, Activity, ShieldCheck, BarChart3, Bell, ArrowRight, Leaf } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Home = () => {
     return (
@@ -32,6 +33,7 @@ const Navbar = () => {
                     <span className="text-xl font-bold tracking-tight">FoodFlow</span>
                 </div>
                 <div className="flex items-center gap-4">
+                    <ModeToggle />
                     {user ? (
                         <div className="flex items-center gap-2">
                             <Button onClick={() => navigate("/dashboard")} variant="default">
@@ -70,15 +72,16 @@ const Hero = () => {
                     playsInline
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-background/60"></div>
+                <div className="absolute inset-0 bg-black/60 dark:bg-black/70"></div>
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="mx-auto max-w-3xl space-y-4">
-                    <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent pb-2">
-                        Smart Food Processing & Waste Minimization
+                    <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl text-white drop-shadow-md pb-2">
+                        Smart Food Processing & <br />
+                        <span className="text-primary dark:text-primary-foreground">Waste Minimization</span>
                     </h1>
-                    <p className="text-xl text-muted-foreground leading-relaxed font-medium">
+                    <p className="text-xl text-white/90 leading-relaxed font-medium drop-shadow-sm">
                         Optimize your food processing workflow with real-time tracking, AI-powered quality assessment, and intelligent alerts to minimize waste and maximize efficiency.
                     </p>
                 </div>
@@ -103,8 +106,19 @@ const DashboardPreview = () => (
     <div className="container mx-auto px-6 mt-12 relative z-20">
         <div className="rounded-xl border border-border/50 shadow-2xl overflow-hidden bg-muted/20 backdrop-blur-sm mx-auto max-w-5xl translate-y-4 opacity-0 animate-slide-up" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
             <div className="aspect-video bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-muted-foreground transition-hover hover:scale-103 cursor-pointer">
-                <span className="text-sm">
-                    <img src="/media/Preview.png" alt="Dashboard Preview" className="transition-transform duration-700 hover:scale-110 w-full h-full object-cover rounded-lg" />
+                <span className="text-sm w-full h-full">
+                    {/* Dark Mode Preview */}
+                    <img
+                        src="/media/Preview.png"
+                        alt="Dashboard Preview (Dark)"
+                        className="hidden dark:block transition-transform duration-700 hover:scale-110 w-full h-full object-cover rounded-lg"
+                    />
+                    {/* Light Mode Preview */}
+                    <img
+                        src="/media/Preview2.png"
+                        alt="Dashboard Preview (Light)"
+                        className="block dark:hidden transition-transform duration-700 hover:scale-110 w-full h-full object-cover rounded-lg"
+                    />
                 </span>
             </div>
         </div>
@@ -162,19 +176,21 @@ const Features = () => (
 );
 
 const FeatureCard = ({ icon: Icon, title, description, delay }) => (
-    <Card className="border-border/50 shadow-sm hover:shadow-xl hover-rotate-3d animate-slide-up opacity-0" style={{ animationDelay: `${delay}s`, animationFillMode: 'forwards' }}>
-        <CardHeader>
-            <div className="p-3 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <Icon className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle className="text-xl">{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <CardDescription className="text-base leading-relaxed">
-                {description}
-            </CardDescription>
-        </CardContent>
-    </Card>
+    <div className="animate-slide-up opacity-0" style={{ animationDelay: `${delay}s`, animationFillMode: 'forwards' }}>
+        <Card className="h-full border-border/50 shadow-sm hover:shadow-xl hover-spin-360">
+            <CardHeader>
+                <div className="p-3 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <Icon className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="text-xl">{title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <CardDescription className="text-base leading-relaxed">
+                    {description}
+                </CardDescription>
+            </CardContent>
+        </Card>
+    </div>
 );
 
 const Footer = () => {

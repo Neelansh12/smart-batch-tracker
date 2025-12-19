@@ -16,6 +16,7 @@ import {
     Home,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { ModeToggle } from '@/components/mode-toggle';
 
 const navItems = [
     { id: 'home', label: 'Home', icon: Home, path: '/' },
@@ -128,7 +129,19 @@ export function DashboardLayout({ children }) {
                     </nav>
 
                     {/* Footer */}
-                    <div className={cn('border-t border-sidebar-border p-4', collapsed && 'p-2')}>
+                    <div className={cn('border-t border-sidebar-border p-4 space-y-4', collapsed && 'p-2 space-y-2')}>
+                        {!collapsed && (
+                            <div className="flex items-center justify-between">
+                                <span className="text-xs font-semibold text-sidebar-foreground/70">Theme</span>
+                                <ModeToggle />
+                            </div>
+                        )}
+                        {collapsed && (
+                            <div className="flex justify-center">
+                                <ModeToggle />
+                            </div>
+                        )}
+
                         <div className={cn('flex items-center gap-3', collapsed && 'justify-center')}>
                             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent">
                                 <span className="text-xs font-semibold text-sidebar-accent-foreground">

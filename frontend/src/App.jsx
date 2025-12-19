@@ -17,33 +17,38 @@ import Insights from "./pages/Insights";
 import News from "./pages/News";
 import NotFound from "./pages/NotFound";
 
+import { ThemeProvider } from "@/components/theme-provider";
+
 const queryClient = new QueryClient();
 
 const App = () => (
     <QueryClientProvider client={queryClient}>
         <AuthProvider>
-            <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/dashboard" element={<Index />} />
-                        <Route path="/auth" element={<Auth />} />
-                        <Route path="/batches" element={<Batches />} />
-                        <Route path="/analytics" element={<Analytics />} />
-                        <Route path="/alerts" element={<Alerts />} />
-                        <Route path="/quality-upload" element={<QualityUpload />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/insights" element={<Insights />} />
-                        <Route path="/news" element={<News />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </BrowserRouter>
-            </TooltipProvider>
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <TooltipProvider>
+                    <Toaster />
+                    <Sonner />
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/dashboard" element={<Index />} />
+                            <Route path="/auth" element={<Auth />} />
+                            <Route path="/batches" element={<Batches />} />
+                            <Route path="/analytics" element={<Analytics />} />
+                            <Route path="/alerts" element={<Alerts />} />
+                            <Route path="/quality-upload" element={<QualityUpload />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/insights" element={<Insights />} />
+                            <Route path="/news" element={<News />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                    </BrowserRouter>
+                </TooltipProvider>
+            </ThemeProvider>
         </AuthProvider>
     </QueryClientProvider>
 );
+
 
 export default App;

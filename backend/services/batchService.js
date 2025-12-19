@@ -1,4 +1,5 @@
 const batchRepository = require('../repositories/batchRepository');
+const alertService = require('./alertService');
 
 class BatchService {
     async getAllBatches(userId) {
@@ -14,6 +15,21 @@ class BatchService {
         if (!updatedBatch) {
             throw new Error('Batch not found');
         }
+
+        // --- ALERT LOGIC: High Loss Detection ---
+        try {
+            if (updatedBatch.loss_percentage && updatedBatch.loss_percentage > 15) {
+                await alertService.createAlert(userId, {
+                    title: "High Yield Loss Alert",
+                    message: `Batch ${updatedBatch.batch_id} has exceeded the loss threshold with ${updatedBatch.loss_percentage.toFixed(2)}% loss.`,
+                    severity: "critical", // User specified >15% is bad, so making it critical
+                    batch_id: updatedBatch._id
+                });
+            }
+        } catch (error) {
+            console.error("Failed to generate batch alert:", error);
+        }
+
         return updatedBatch;
     }
 
