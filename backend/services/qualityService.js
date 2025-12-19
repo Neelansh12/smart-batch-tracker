@@ -1,5 +1,6 @@
 const qualityRepository = require('../repositories/qualityRepository');
 const alertService = require('./alertService');
+const GEMINI_API_KEY = require('../Config/serverConfig').GEMINI_API_KEY;
 
 class QualityService {
     async getAllUploads(userId) {
@@ -15,15 +16,17 @@ class QualityService {
         let freshnessScore = 0;
         let defectScore = 0;
         let aiAnalysis = 'Analysis failed';
+        console.log(process.env.GEMINI_API_KEY);
 
         try {
+
             if (process.env.GEMINI_API_KEY) {
                 const { GoogleGenerativeAI } = require("@google/generative-ai");
                 const fs = require("fs");
                 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
                 // Add safety settings to prevent over-blocking
                 const model = genAI.getGenerativeModel({
-                    model: "gemini-1.5-flash",
+                    model: "gemini-2.5-flash",
                     safetySettings: [
                         { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
                         { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
@@ -85,6 +88,7 @@ class QualityService {
             freshnessScore = 0;
             defectScore = 0;
         }
+
 
         const uploadData = {
             user_id: userId,

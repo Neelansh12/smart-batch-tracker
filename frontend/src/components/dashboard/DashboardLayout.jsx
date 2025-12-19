@@ -16,10 +16,7 @@ import {
     Home,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-<<<<<<< HEAD:src/components/dashboard/DashboardLayout.jsx
-=======
 import { ModeToggle } from '@/components/mode-toggle';
->>>>>>> f33b072b3e1bf2de2cf4bc8c5fcbe665b137b73d:frontend/src/components/dashboard/DashboardLayout.jsx
 
 const navItems = [
     { id: 'home', label: 'Home', icon: Home, path: '/' },
@@ -132,9 +129,6 @@ export function DashboardLayout({ children }) {
                     </nav>
 
                     {/* Footer */}
-<<<<<<< HEAD:src/components/dashboard/DashboardLayout.jsx
-                    <div className={cn('border-t border-sidebar-border p-4', collapsed && 'p-2')}>
-=======
                     <div className={cn('border-t border-sidebar-border p-4 space-y-4', collapsed && 'p-2 space-y-2')}>
                         {!collapsed && (
                             <div className="flex items-center justify-between">
@@ -148,7 +142,6 @@ export function DashboardLayout({ children }) {
                             </div>
                         )}
 
->>>>>>> f33b072b3e1bf2de2cf4bc8c5fcbe665b137b73d:frontend/src/components/dashboard/DashboardLayout.jsx
                         <div className={cn('flex items-center gap-3', collapsed && 'justify-center')}>
                             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent">
                                 <span className="text-xs font-semibold text-sidebar-accent-foreground">

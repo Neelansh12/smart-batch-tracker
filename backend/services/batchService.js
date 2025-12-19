@@ -1,8 +1,5 @@
 const batchRepository = require('../repositories/batchRepository');
-<<<<<<< HEAD
-=======
 const alertService = require('./alertService');
->>>>>>> f33b072b3e1bf2de2cf4bc8c5fcbe665b137b73d
 
 class BatchService {
     async getAllBatches(userId) {
@@ -18,8 +15,6 @@ class BatchService {
         if (!updatedBatch) {
             throw new Error('Batch not found');
         }
-<<<<<<< HEAD
-=======
 
         // --- ALERT LOGIC: High Loss Detection ---
         try {
@@ -35,7 +30,6 @@ class BatchService {
             console.error("Failed to generate batch alert:", error);
         }
 
->>>>>>> f33b072b3e1bf2de2cf4bc8c5fcbe665b137b73d
         return updatedBatch;
     }
 
