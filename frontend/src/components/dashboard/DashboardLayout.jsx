@@ -24,7 +24,8 @@ const navItems = [
     { id: 'batches', label: 'Batch Tracking', icon: Package, path: '/batches' },
     { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
     { id: 'alerts', label: 'Alerts', icon: Bell, path: '/alerts' },
-    { id: 'upload', label: 'Quality Upload', icon: Upload, path: '/quality-upload' },
+    { id: 'quality-upload', label: 'Quality Upload', icon: Upload, path: '/quality-upload' },
+    { id: 'cost-calculations', label: 'Cost Calculations', icon: BarChart3, path: '/costs' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
 ];
 

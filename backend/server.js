@@ -30,6 +30,8 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/batches', require('./routes/batches'));
 app.use('/api/alerts', require('./routes/alerts'));
 app.use('/api/quality', require('./routes/quality'));
+app.use('/api/environmental', require('./routes/environmental'));
+app.use('/api/costs', require('./routes/costs'));
 
 app.get('/', (req, res) => {
     res.send('Smart Batch Tracker API is running');

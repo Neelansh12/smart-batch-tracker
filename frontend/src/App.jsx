@@ -11,6 +11,7 @@ import Batches from "./pages/Batches";
 import Analytics from "./pages/Analytics";
 import Alerts from "./pages/Alerts";
 import QualityUpload from "./pages/QualityUpload";
+import CostCalculations from "./pages/CostCalculations";
 import Settings from "./pages/Settings";
 import About from "./pages/About";
 import Insights from "./pages/Insights";
@@ -37,6 +38,7 @@ const App = () => (
                             <Route path="/analytics" element={<Analytics />} />
                             <Route path="/alerts" element={<Alerts />} />
                             <Route path="/quality-upload" element={<QualityUpload />} />
+                            <Route path="/costs" element={<CostCalculations />} />
                             <Route path="/settings" element={<Settings />} />
                             <Route path="/about" element={<About />} />
                             <Route path="/insights" element={<Insights />} />

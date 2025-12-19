@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { MetricCard } from '@/components/dashboard/MetricCard';
+import { EnvironmentalWidget } from '@/components/dashboard/EnvironmentalWidget'; // Imported
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -108,6 +109,9 @@ const Index = () => {
                         </Button>
                     </div>
                 </div>
+
+                {/* Environmental Widget */}
+                <EnvironmentalWidget />
 
                 {/* Quick Stats */}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

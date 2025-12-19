@@ -35,7 +35,7 @@ class QualityService {
                     ]
                 });
 
-                const prompt = "Analyze this food/raw material image. Return a raw JSON object (no markdown formatting, no backticks) with these fields: quality_score (0-100), freshness_score (0-100), defect_score (0-100), analysis_text (short summary).";
+                const prompt = "Analyze this food/raw material image. Return a raw JSON object (no markdown formatting, no backticks) with these fields: quality_score (0-100), freshness_score (0-100), defect_score (0-100), analysis_text(This text shall summarize the condition of the food/raw material and also give the cause , cure and precautions to be taken. Max: 100 words).";
 
                 const imagePart = {
                     inlineData: {

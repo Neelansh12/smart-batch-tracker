@@ -11,7 +11,7 @@ const stages = [
 
 export function BatchPipeline({ batches }) {
     const getBatchesByStage = (stage) =>
-        batches.filter((b) => b.stage === stage);
+        batches.filter((b) => (b.stage || 'inbound') === stage);
 
     return (
         <div className="rounded-xl border border-border bg-card p-6 shadow-card">
@@ -58,25 +58,27 @@ export function BatchPipeline({ batches }) {
                                         className="group cursor-pointer rounded-lg border border-border bg-background p-3 transition-all hover:border-primary hover:shadow-card"
                                     >
                                         <div className="flex items-center justify-between">
-                                            <span className="text-xs font-semibold text-primary">{batch.id}</span>
-                                            <span
-                                                className={cn(
-                                                    'rounded-full px-1.5 py-0.5 text-[10px] font-medium',
-                                                    batch.qualityScore >= 90
-                                                        ? 'bg-success/10 text-success'
-                                                        : batch.qualityScore >= 75
-                                                            ? 'bg-warning/10 text-warning'
-                                                            : 'bg-destructive/10 text-destructive'
-                                                )}
-                                            >
-                                                {batch.qualityScore}%
-                                            </span>
+                                            <span className="text-xs font-semibold text-primary">{batch.batch_id}</span>
+                                            {batch.qualityScore && (
+                                                <span
+                                                    className={cn(
+                                                        'rounded-full px-1.5 py-0.5 text-[10px] font-medium',
+                                                        batch.qualityScore >= 90
+                                                            ? 'bg-success/10 text-success'
+                                                            : batch.qualityScore >= 75
+                                                                ? 'bg-warning/10 text-warning'
+                                                                : 'bg-destructive/10 text-destructive'
+                                                    )}
+                                                >
+                                                    {batch.qualityScore}%
+                                                </span>
+                                            )}
                                         </div>
                                         <p className="mt-1 truncate text-xs text-muted-foreground">
-                                            {batch.rawMaterial}
+                                            {batch.final_product || batch.product}
                                         </p>
                                         <p className="text-xs font-medium text-foreground">
-                                            {batch.inputWeight.toLocaleString()} kg
+                                            {(batch.input_weight || 0).toLocaleString()} kg
                                         </p>
                                     </div>
                                 ))}
