@@ -1,4 +1,5 @@
 const qualityRepository = require('../repositories/qualityRepository');
+const alertService = require('./alertService');
 
 class QualityService {
     async getAllUploads(userId) {
@@ -19,8 +20,17 @@ class QualityService {
             if (process.env.GEMINI_API_KEY) {
                 const { GoogleGenerativeAI } = require("@google/generative-ai");
                 const fs = require("fs");
-                const genAI = new GoogleGenerativeAI('AIzaSyBwSh18hAUVr1yz_c8XN4ym4ToI38VOPNc');
-                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+                const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+                // Add safety settings to prevent over-blocking
+                const model = genAI.getGenerativeModel({
+                    model: "gemini-1.5-flash",
+                    safetySettings: [
+                        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+                        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+                        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+                        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
+                    ]
+                });
 
                 const prompt = "Analyze this food/raw material image. Return a raw JSON object (no markdown formatting, no backticks) with these fields: quality_score (0-100), freshness_score (0-100), defect_score (0-100), analysis_text (short summary).";
 
@@ -33,10 +43,19 @@ class QualityService {
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = result.response;
-                const text = response.text();
 
-                // Clean the text to ensure it's valid JSON (remove backticks if present)
-                const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                // Check if we got a valid text response
+                let text = "";
+                try {
+                    text = response.text();
+                } catch (e) {
+                    console.error("Error getting text from response:", e);
+                    throw new Error("AI blocked the response due to safety settings or other API issue.");
+                }
+
+                // improved json parsing
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                const jsonStr = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
                 const analysis = JSON.parse(jsonStr);
 
                 qualityScore = analysis.quality_score || 70;
@@ -53,8 +72,18 @@ class QualityService {
             }
         } catch (error) {
             console.error("AI Analysis failed:", error);
-            aiAnalysis = "AI analysis failed, using fallback values.";
-            qualityScore = 50;
+            // Show the actual error message or a user-friendly version
+            let errorMessage = error.message;
+            if (errorMessage.includes("API key not valid")) errorMessage = "Invalid API Key";
+            if (errorMessage.includes("fetch failed")) errorMessage = "Network Error";
+            if (errorMessage.includes("404")) errorMessage = "Enable 'Generative Language API' in Google Cloud Console.";
+
+            aiAnalysis = `AI Analysis Failed: ${errorMessage}`;
+
+            // Set scores to null/0 to indicate failure, strictly no dummy data
+            qualityScore = 0;
+            freshnessScore = 0;
+            defectScore = 0;
         }
 
         const uploadData = {
@@ -68,7 +97,44 @@ class QualityService {
             notes: data.notes,
         };
 
-        return await qualityRepository.create(uploadData);
+        // Create the upload record
+        const savedUpload = await qualityRepository.create(uploadData);
+
+        // --- ALERT GENERATION LOGIC ---
+        try {
+            // 1. Alert for System Failure (AI Failed)
+            if (aiAnalysis.includes("AI Analysis Failed")) {
+                await alertService.createAlert(userId, {
+                    title: "AI Analysis Failed",
+                    message: `Image upload for batch ${data.batch_id || 'N/A'} failed to analyze. Reason: ${aiAnalysis}`,
+                    severity: "medium",
+                    batch_id: data.batch_id // might be null/undefined if not provided
+                });
+            }
+            // 2. Alert for Low Quality (Score < 60)
+            else if (qualityScore < 60) {
+                await alertService.createAlert(userId, {
+                    title: "Low Quality Detected",
+                    message: `Batch ${data.batch_id || 'N/A'} recorded a Quality Score of ${qualityScore}%. Action may be required.`,
+                    severity: "high",
+                    batch_id: data.batch_id
+                });
+            }
+            // 3. Alert for High Defect Rate (Score > 20)
+            else if (defectScore > 20) {
+                await alertService.createAlert(userId, {
+                    title: "High Defect Rate",
+                    message: `Batch ${data.batch_id || 'N/A'} has a Defect Score of ${defectScore}%.`,
+                    severity: "medium",
+                    batch_id: data.batch_id
+                });
+            }
+        } catch (alertError) {
+            console.error("Failed to generate alert:", alertError);
+            // Don't block the main response if alerting fails
+        }
+
+        return savedUpload;
     }
 
     async deleteUpload(id, userId) {
