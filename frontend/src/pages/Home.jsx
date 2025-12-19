@@ -43,9 +43,7 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <>
-                            <Button variant="ghost" onClick={() => navigate("/auth")}>
-                                Sign In
-                            </Button>
+
                             <Button onClick={() => navigate("/auth")} variant="default">
                                 Get Started
                             </Button>
