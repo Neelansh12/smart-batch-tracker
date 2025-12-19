@@ -19,8 +19,8 @@ class QualityService {
             if (process.env.GEMINI_API_KEY) {
                 const { GoogleGenerativeAI } = require("@google/generative-ai");
                 const fs = require("fs");
-                const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                const genAI = new GoogleGenerativeAI('AIzaSyBwSh18hAUVr1yz_c8XN4ym4ToI38VOPNc');
+                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
                 const prompt = "Analyze this food/raw material image. Return a raw JSON object (no markdown formatting, no backticks) with these fields: quality_score (0-100), freshness_score (0-100), defect_score (0-100), analysis_text (short summary).";
 
